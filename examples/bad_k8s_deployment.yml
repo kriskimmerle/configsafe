@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: insecure-app
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: insecure-app
+  template:
+    metadata:
+      labels:
+        app: insecure-app
+    spec:
+      hostNetwork: true
+      hostPID: true
+      containers:
+        - name: app
+          image: myapp:latest
+          securityContext:
+            privileged: true
+            runAsNonRoot: false
+            allowPrivilegeEscalation: true
+          env:
+            - name: DB_PASSWORD
+              value: sk-1234567890abcdefghijklmnopqrstuvwxyz1234567890abcdef
+            - name: API_TOKEN
+              value: changeme
